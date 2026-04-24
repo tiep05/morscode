@@ -55,7 +55,7 @@ body {
 <h2>Morse trainer (met jouw schema)</h2>
 
 <div id="container">
-    <img id="morseImg" src="morse.jpg">
+    <img id="morseImg" src="morscode.png">
 
     <!-- Letter hotspots (ongeveer gepositioneerd) -->
     <div class="letter" id="E" style="top:110px; left:290px;"></div>
