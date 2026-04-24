@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Morse met jouw schema</title>
+
+<style>
+body {
+    background:#111;
+    color:white;
+    text-align:center;
+    font-family:Arial;
+}
+
+#container {
+    position: relative;
+    display: inline-block;
+}
+
+#morseImg {
+    width: 500px;
+}
+
+/* overlay letters */
+.letter {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    pointer-events: none;
+    transition: 0.2s;
+}
+
+.active {
+    background: rgba(255, 209, 102, 0.8);
+    box-shadow: 0 0 15px #ffd166;
+}
+
+#output {
+    margin-top: 20px;
+    font-size: 26px;
+}
+
+#pad {
+    margin-top: 30px;
+    padding: 40px;
+    border: 2px dashed #666;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Morse trainer (met jouw schema)</h2>
+
+<div id="container">
+    <img id="morseImg" src="morse.jpg">
+
+    <!-- Letter hotspots (ongeveer gepositioneerd) -->
+    <div class="letter" id="E" style="top:110px; left:290px;"></div>
+    <div class="letter" id="T" style="top:110px; left:220px;"></div>
+    <div class="letter" id="A" style="top:250px; left:300px;"></div>
+    <div class="letter" id="N" style="top:250px; left:220px;"></div>
+    <div class="letter" id="I" style="top:110px; left:340px;"></div>
+    <div class="letter" id="M" style="top:110px; left:180px;"></div>
+    <div class="letter" id="O" style="top:110px; left:140px;"></div>
+    <div class="letter" id="S" style="top:110px; left:380px;"></div>
+    <div class="letter" id="H" style="top:110px; left:420px;"></div>
+    <div class="letter" id="R" style="top:250px; left:350px;"></div>
+    <div class="letter" id="D" style="top:360px; left:220px;"></div>
+    <div class="letter" id="B" style="top:420px; left:220px;"></div>
+    <div class="letter" id="K" style="top:250px; left:180px;"></div>
+    <div class="letter" id="G" style="top:180px; left:180px;"></div>
+    <div class="letter" id="Z" style="top:220px; left:180px;"></div>
+    <div class="letter" id="U" style="top:180px; left:330px;"></div>
+    <div class="letter" id="F" style="top:220px; left:330px;"></div>
+    <div class="letter" id="L" style="top:250px; left:390px;"></div>
+    <div class="letter" id="W" style="top:360px; left:300px;"></div>
+    <div class="letter" id="P" style="top:360px; left:350px;"></div>
+    <div class="letter" id="X" style="top:360px; left:140px;"></div>
+    <div class="letter" id="C" style="top:300px; left:180px;"></div>
+    <div class="letter" id="Y" style="top:250px; left:140px;"></div>
+    <div class="letter" id="Q" style="top:180px; left:140px;"></div>
+</div>
+
+<div id="output"></div>
+<div id="pad">Klik of gebruik spatie</div>
+
+<script>
+const morse = {
+    ".":"E","-":"T",
+    "..":"I",".-":"A","-.":"N","--":"M",
+    "...":"S","....":"H",
+    ".-.":"R","-..":"D","-...":"B",
+    "-.-":"K","--.":"G","--..":"Z",
+    "..-":"U","..-.":"F",
+    ".-..":"L",".--":"W",".--.":"P",
+    "-..-":"X","-.-.":"C","-.--":"Y","--.-":"Q"
+};
+
+let current = "";
+let output = "";
+let start = 0;
+
+function highlight(letter){
+    document.querySelectorAll(".letter").forEach(el=>{
+        el.classList.remove("active");
+    });
+
+    if(document.getElementById(letter)){
+        document.getElementById(letter).classList.add("active");
+    }
+}
+
+function finish(){
+    let letter = morse[current] || "?";
+    output += letter;
+    document.getElementById("output").innerText = output;
+    highlight(letter);
+    current = "";
+}
+
+function down(){
+    start = Date.now();
+}
+
+function up(){
+    let d = Date.now()-start;
+    current += d < 200 ? "." : "-";
+}
+
+// keyboard
+document.addEventListener("keydown", e=>{
+    if(e.code==="Space"){
+        e.preventDefault();
+        down();
+    }
+    if(e.code==="Enter"){
+        finish();
+    }
+});
+
+document.addEventListener("keyup", e=>{
+    if(e.code==="Space"){
+        up();
+    }
+});
+
+// mouse
+const pad = document.getElementById("pad");
+pad.onmousedown = down;
+pad.onmouseup = up;
+
+</script>
+
+</body>
+</html>
